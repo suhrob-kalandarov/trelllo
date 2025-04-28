@@ -24,7 +24,7 @@ public class VerificationController {
         String code = String.valueOf((int)(Math.random() * 9000) + 1000);
         emailService.sendVerificationCode(email, code);
         session.setAttribute("verificationCode", code);
-        return "auth/verification";
+        return "redirect:/auth/verification";
     }
 
     @Transactional
