@@ -26,6 +26,7 @@ public class DataRunner implements CommandLineRunner {
                     .email("user@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.USER))
+                    .verified(true)
                     .build();
 
             User manager = User.builder()
@@ -33,6 +34,7 @@ public class DataRunner implements CommandLineRunner {
                     .email("manager@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.MANAGER))
+                    .verified(true)
                     .build();
 
             User admin = User.builder()
@@ -40,6 +42,7 @@ public class DataRunner implements CommandLineRunner {
                     .email("admin@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.ADMIN))
+                    .verified(true)
                     .build();
 
             userRepository.saveAll(List.of(user1, manager, admin));

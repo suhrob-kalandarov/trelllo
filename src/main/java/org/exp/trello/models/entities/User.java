@@ -34,4 +34,7 @@ public class User extends BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private List<UserRole> roles;
+
+    @Column(nullable = false)
+    private boolean verified = false;
 }
