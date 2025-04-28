@@ -26,25 +26,22 @@ public class DataLoader implements CommandLineRunner {
             user.setFullName("User One");
             user.setEmail("user@gmail.com");
             user.setPassword(passwordEncoder.encode("root123"));
-            user.setRepeatPassword(passwordEncoder.encode("root123"));
             user.setRoles(Collections.singletonList(UserRole.USER));
             user.setVerified(true);
 
             User manager = new User();
-            user.setFullName("Manager One");
-            user.setEmail("manager@gmail.com");
-            user.setPassword(passwordEncoder.encode("root123"));
-            user.setRepeatPassword(passwordEncoder.encode("root123"));
-            user.setRoles(Collections.singletonList(UserRole.MANAGER));
-            user.setVerified(true);
+            manager.setFullName("Manager One");
+            manager.setEmail("manager@gmail.com");
+            manager.setPassword(passwordEncoder.encode("root123"));
+            manager.setRoles(Collections.singletonList(UserRole.MANAGER));
+            manager.setVerified(true);
 
             User admin = new User();
-            user.setFullName("Admin One");
-            user.setEmail("admin@gmail.com");
-            user.setPassword(passwordEncoder.encode("root123"));
-            user.setRepeatPassword(passwordEncoder.encode("root123"));
-            user.setRoles(Collections.singletonList(UserRole.ADMIN));
-            user.setVerified(true);
+            admin.setFullName("Admin One");
+            admin.setEmail("admin@gmail.com");
+            admin.setPassword(passwordEncoder.encode("root123"));
+            admin.setRoles(Collections.singletonList(UserRole.ADMIN));
+            admin.setVerified(true);
 
             userRepository.saveAll(List.of(user, manager, admin));
 
