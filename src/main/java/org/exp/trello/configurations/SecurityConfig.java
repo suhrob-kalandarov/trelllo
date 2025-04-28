@@ -17,7 +17,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
-                                .requestMatchers("/", "/login", "/register").permitAll()
+                                .requestMatchers("/", "/login", "/register","/send-code","/verify").permitAll()
 
                                 .anyRequest().authenticated()
                 )
