@@ -57,6 +57,7 @@
     </div>
 
     <form action="/verify" method="POST">
+        <input type="hidden" th:name="_csrf" th:value="_csrf.token">
         <input type="text" name="verificationCode" placeholder="Enter verification code" required>
         <button type="submit">Verify</button>
     </form>
