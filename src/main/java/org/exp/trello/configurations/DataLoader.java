@@ -26,6 +26,7 @@ public class DataLoader implements CommandLineRunner {
             user.setFullName("User One");
             user.setEmail("user@gmail.com");
             user.setPassword(passwordEncoder.encode("root123"));
+            user.setRepeatPassword(passwordEncoder.encode("root123"));
             user.setRoles(Collections.singletonList(UserRole.USER));
             user.setVerified(true);
 
@@ -33,6 +34,7 @@ public class DataLoader implements CommandLineRunner {
             manager.setFullName("Manager One");
             manager.setEmail("manager@gmail.com");
             manager.setPassword(passwordEncoder.encode("root123"));
+            manager.setRepeatPassword(passwordEncoder.encode("root123"));
             manager.setRoles(Collections.singletonList(UserRole.MANAGER));
             manager.setVerified(true);
 
@@ -40,6 +42,7 @@ public class DataLoader implements CommandLineRunner {
             admin.setFullName("Admin One");
             admin.setEmail("admin@gmail.com");
             admin.setPassword(passwordEncoder.encode("root123"));
+            admin.setRepeatPassword(passwordEncoder.encode("root123"));
             admin.setRoles(Collections.singletonList(UserRole.ADMIN));
             admin.setVerified(true);
 
