@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.exp.trello.models.entities.User;
 import org.exp.trello.repositories.UserRepository;
 import org.exp.trello.services.EmailService;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class VerificationController {
     private final EmailService emailService;
@@ -20,9 +21,14 @@ public class VerificationController {
 
     @Transactional
     @GetMapping("/send-code")
-    public String sendCode(@RequestParam String email, HttpSession session) {
+    public String sendCode(HttpSession session) {
+        Object user = session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/auth/login";
+        }
+        User sessionUser = (User) user;
         String code = String.valueOf((int)(Math.random() * 9000) + 1000);
-        emailService.sendVerificationCode(email, code);
+        emailService.sendVerificationCode(sessionUser.getEmail(), code);
         session.setAttribute("verificationCode", code);
         return "redirect:/auth/verification";
     }
@@ -43,7 +49,7 @@ public class VerificationController {
         }
         registeredUser.setVerified(true);
         userRepository.save(registeredUser);
-        return "auth/login";
+        return "redirect:/auth/login";
     }
 
 }
