@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Page</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+        }
+        .verification-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+        }
+        .verification-container input {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .verification-container button {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: #4f46e5;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .verification-container button:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+
+<div class="verification-container">
+    <h2>Verify Your Account</h2>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form action="/verify" method="POST">
+        <input type="hidden" th:name="_csrf" th:value="_csrf.token">
+        <input type="text" name="verificationCode" placeholder="Enter verification code" required>
+        <button type="submit">Verify</button>
+    </form>
+</div>
+
+</body>
+</html>
