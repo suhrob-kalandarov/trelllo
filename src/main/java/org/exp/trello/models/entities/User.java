@@ -29,6 +29,10 @@ public class User extends BaseEntity {
     @Size(min = 6, message = "Password should have at least 6 characters")
     private String password;
 
+    @NotNull
+    @Size(min = 6, message = "Password should have at least 6 characters")
+    private String repeatPassword;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private List<UserRole> roles;
