@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.exp.trello.models.BaseEntity;
-import org.exp.trello.models.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,13 +25,13 @@ public class Task extends BaseEntity {
     private String description;
 
     @Column(name = "in_active")
-    private Boolean inActive;
+    private Boolean inActive = false;
 
     @Column(nullable = false)
     private LocalDateTime deadline = LocalDateTime.now().plusDays(3);
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_id", nullable = false)
     private TaskStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER)
