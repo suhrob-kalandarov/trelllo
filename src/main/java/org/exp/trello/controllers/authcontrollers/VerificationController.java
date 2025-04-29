@@ -30,7 +30,7 @@ public class VerificationController {
         String code = String.valueOf((int)(Math.random() * 9000) + 1000);
         emailService.sendVerificationCode(sessionUser.getEmail(), code);
         session.setAttribute("verificationCode", code);
-        return "redirect:/auth/verification";
+        return "auth/verification";
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class VerificationController {
         }
         registeredUser.setVerified(true);
         userRepository.save(registeredUser);
-        return "redirect:/auth/login";
+        return "auth/login";
     }
 
 }
