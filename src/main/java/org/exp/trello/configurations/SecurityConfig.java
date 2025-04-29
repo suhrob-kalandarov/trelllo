@@ -22,11 +22,10 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        /// tegilmasin login page da xatolik bor default page dan foydalinilsin!
-                        /*.loginPage("/login")
-                        //.loginProcessingUrl("/login")
-                        .usernameParameter("email")
-                        .passwordParameter("password")*/
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )

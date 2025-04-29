@@ -1,4 +1,4 @@
-package org.exp.trello.controllers.auth;
+package org.exp.trello.controllers.authcontrollers;
 
 
 import jakarta.servlet.http.HttpSession;

@@ -5,16 +5,19 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.exp.trello.models.BaseEntity;
 import org.exp.trello.models.enums.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "trello_users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @NotNull
     @NotBlank(message = "Full name must not be blank")
@@ -39,4 +42,16 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private boolean verified = false;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> (GrantedAuthority) () -> "ROLE_" + role.name())
+                .toList();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }
