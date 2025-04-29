@@ -1,6 +1,5 @@
 package org.exp.trello.controllers.authcontrollers;
 
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.exp.trello.models.entities.User;
@@ -22,7 +21,7 @@ public class RegisterController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/auth/register")
+    @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
         return "auth/register";
@@ -34,18 +33,13 @@ public class RegisterController {
             Model model,
             HttpSession session) {
 
-        if (userRepository.existsByFullName(user.getFullName())) {
-            model.addAttribute("error", "This username is already taken");
-            return "auth/register";
-        }
-
         if (userRepository.existsByEmail(user.getEmail())) {
             model.addAttribute("error", "This email is already taken");
-            return "auth/register";
+            return "auth/login";
         }
 
         if (!user.getPassword().equals(user.getRepeatPassword())) {
-            model.addAttribute("error", "Passwords do not match");
+            model.addAttribute("error", "Passwords do not match!");
             return "auth/register";
         }
 
