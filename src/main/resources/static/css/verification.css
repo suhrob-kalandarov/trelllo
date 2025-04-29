@@ -61,7 +61,7 @@ body {
 
 .image-section {
     flex: 1;
-    background: url('/images/default-profile-picture.png') no-repeat center center;
+    background: url('/images/verification-background.jpeg') no-repeat center center;
     background-size: cover;
 }
 

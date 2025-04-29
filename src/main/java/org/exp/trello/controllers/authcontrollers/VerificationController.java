@@ -37,9 +37,12 @@ public class VerificationController {
     @PostMapping("/verify")
     public String verify(HttpSession session, @RequestParam String verificationCode, Model model) {
         Object user = session.getAttribute("user");
+
         if (user == null) {
+            System.out.println("user = " + user);
             return "redirect:/auth/login";
         }
+
         User registeredUser = (User) user;
 
         String code = (String) session.getAttribute("verificationCode");
@@ -47,8 +50,13 @@ public class VerificationController {
             model.addAttribute("error", "Verification code is incorrect. Please try again");
             return "auth/verification";
         }
+
         registeredUser.setVerified(true);
-        userRepository.save(registeredUser);
+        User save = userRepository.save(registeredUser);
+
+        System.out.println("registeredUser = " + registeredUser);
+        System.out.println("save = " + save);
+
         return "auth/login";
     }
 
