@@ -17,16 +17,15 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
-                                .requestMatchers("/", "/login", "/register").permitAll()
+                                .requestMatchers("/", "/login", "/auth/**", "/register","/send-code","/verify").permitAll()
 
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        /// tegilmasin login page da xatolik bor default page dan foydalinilsin!
-                        /*.loginPage("/login")
-                        //.loginProcessingUrl("/login")
-                        .usernameParameter("email")
-                        .passwordParameter("password")*/
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )

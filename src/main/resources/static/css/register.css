@@ -1,5 +1,3 @@
-/* src/main/resources/static/css/login.css */
-
 body {
     display: flex;
     align-items: center;
@@ -9,8 +7,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
 }
-
-.login-container {
+.register-container {
     display: flex;
     background: white;
     border-radius: 32px;
@@ -18,9 +15,8 @@ body {
     overflow: hidden;
     max-width: 900px;
     width: 90%;
-    height: 500px;
+    height: 600px;
 }
-
 .form-section {
     flex: 1;
     padding: 2.5rem;
@@ -29,23 +25,19 @@ body {
     justify-content: center;
     text-align: center;
 }
-
 .form-section h2 {
     margin-bottom: 1rem;
     font-size: 2rem;
     color: #111827;
 }
-
 .form-section p {
     margin-bottom: 1.5rem;
     color: #6b7280;
 }
-
 .error-message {
     color: red;
     margin-bottom: 1rem;
 }
-
 .form-section input {
     width: 70%;
     padding: 0.8rem;
@@ -53,7 +45,6 @@ body {
     border: 1px solid #ccc;
     border-radius: 8px;
 }
-
 .form-section button {
     width: 70%;
     padding: 0.8rem;
@@ -63,38 +54,24 @@ body {
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 1rem;
 }
-
 .form-section button:hover {
     background-color: #4338ca;
 }
 
-.register-link {
-    margin-top: 1rem;
-}
-
-.register-link a {
-    text-decoration: none;
-    color: #6b7280;
-    font-size: 0.9rem;
-}
-
-.register-link a:hover {
-    text-decoration: underline;
-    color: #4f46e5;
+.image-section {
+    flex: 1;
+    background: url('/images/register-background.jpeg') no-repeat center center;
+    background-size: cover;
 }
 
 .image-section {
     flex: 1;
-    background: #e5e7eb url('/images/login-background.png') no-repeat center center;
-    background-size: cover;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #e5e7eb;
 }
-
-
 .image-section img {
     width: 100%;
     height: 100%;
