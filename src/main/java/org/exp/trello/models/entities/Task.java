@@ -1,17 +1,14 @@
 package org.exp.trello.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.exp.trello.models.BaseEntity;
-import org.exp.trello.models.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,24 +22,21 @@ public class Task extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "in_active")
-    private Boolean inActive;
+    @OneToOne
+    @JoinColumn(name = "attachment_id")
+    private Attachment attachment;
 
     @Column(nullable = false)
     private LocalDateTime deadline = LocalDateTime.now().plusDays(3);
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TaskStatus status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "column_id", nullable = false)
+    private TaskColumn column;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "task", cascade = CascadeType.ALL)
-    private TaskAttachment attachment;
-
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany
     private List<Comment> comments;
-
 }

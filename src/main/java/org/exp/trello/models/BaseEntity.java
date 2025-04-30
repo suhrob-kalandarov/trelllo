@@ -1,8 +1,11 @@
 package org.exp.trello.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
 @MappedSuperclass
 public class BaseEntity {
 
