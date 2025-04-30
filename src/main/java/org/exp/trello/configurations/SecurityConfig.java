@@ -17,7 +17,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
-                                .requestMatchers("/", "/login", "/auth/**", "/register","/send-code","/verify").permitAll()
+                                .requestMatchers("/login", "/auth/**", "/register","/send-code","/verify").permitAll()
 
                                 .anyRequest().authenticated()
                 )
@@ -26,7 +26,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
