@@ -1,45 +1,620 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf?.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}"/>
+    <title>TaskFlow | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home.css">
+
     <style>
+        :root {
+            --primary: #5e72e4;
+            --primary-light: #7e8ef1;
+            --primary-dark: #4355c5;
+            --secondary: #f7fafc;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --info: #4299e1;
+            --border-radius: 0.5rem;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        nav {
-            width: 98%;
-            padding: 1rem;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-dark);
+            min-height: 100vh;
             display: flex;
-            justify-content: flex-end;
-            background-color: #f8f9fa;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-direction: column;
         }
-        nav a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
+
+        /* Navbar */
+        .navbar {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1030; /* Higher z-index for main navbar */
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin: 0 0.2rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background-color: rgba(94, 114, 228, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+        }
+
+        /* Secondary Navbar */
+        .navbar-secondary {
+            background-color: var(--secondary);
+            padding: 0.5rem 1.5rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1020; /* Lower z-index than main navbar */
+        }
+
+        .navbar-secondary .nav-link {
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        /* User Avatar */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover .user-avatar {
+            transform: scale(1.1);
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            border: none;
+            padding: 0.5rem;
+            z-index: 1031; /* Higher than both navbars */
+        }
+
+        .dropdown-item {
+            border-radius: calc(var(--border-radius) - 0.2rem);
+            padding: 0.5rem 1rem;
+            transition: var(--transition);
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(94, 114, 228, 0.1);
+            color: var(--primary);
+        }
+
+        /* Board */
+        .board-container {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            background-color: #f0f2f5;
+            min-height: calc(100vh - 120px);
+        }
+
+        .column {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 300px;
+            min-width: 300px;
+            height: fit-content;
+            max-height: calc(100vh - 170px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+
+        .column:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .column-header {
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .column-title {
             font-size: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
         }
-        nav a:hover {
-            text-decoration: underline;
+
+        .column-title-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary-light);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
         }
-        h1 {
-            text-align: center;
-            margin-top: 5rem;
+
+        .column-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .column-actions .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .column-actions .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .column-tasks {
+            padding: 0.75rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Task Cards */
+        .task-card {
+            background: white;
+            border-radius: calc(var(--border-radius) - 0.1rem);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--primary);
+            transition: var(--transition);
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .task-card.dragging {
+            opacity: 0.6;
+            transform: scale(0.95);
+            box-shadow: var(--shadow-lg);
+            background: #f8f9fa;
+            z-index: 1000;
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(94, 114, 228, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+            z-index: -1;
+        }
+
+        .task-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: calc(var(--border-radius) - 0.2rem);
+            margin-bottom: 0.75rem;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .task-description {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .task-dates {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .task-date i, .task-deadline i {
+            margin-right: 0.25rem;
+        }
+
+        .task-deadline {
+            color: var(--warning);
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .task-assignee {
+            display: flex;
+            align-items: center;
+        }
+
+        .assignee-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .task-assignee:hover .assignee-avatar {
+            transform: scale(1.1);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .task-actions .btn {
+            padding: 0.25rem 0.4rem;
+            font-size: 0.7rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .task-actions .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .task-actions .btn-outline-primary:hover {
+            background-color: var(--primary);
+        }
+
+        .task-actions .btn-outline-danger:hover {
+            background-color: var(--danger);
+        }
+
+        /* Add Column */
+        .add-column {
+            background: rgba(237, 242, 247, 0.5);
+            border: 2px dashed #cbd5e0;
+            color: var(--text-light);
+            min-width: 300px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+        }
+
+        .add-column:hover {
+            background: rgba(237, 242, 247, 0.8);
+            border-color: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .add-column i {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .add-column:hover i {
+            transform: rotate(90deg);
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background-color: var(--secondary);
+            border-radius: calc(var(--border-radius) - 0.1rem) calc(var(--border-radius) - 0.1rem) 0 0;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 0.6rem 1rem;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.25);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .form-switch .form-check-input:focus {
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.25);
+        }
+
+        /* Badges */
+        .badge {
+            font-weight: 500;
+            padding: 0.35em 0.65em;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Drop Zone Highlight */
+        .column-tasks.drop-zone-active {
+            background-color: rgba(94, 114, 228, 0.1);
+            border-radius: var(--border-radius);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(94, 114, 228, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(94, 114, 228, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(94, 114, 228, 0);
+            }
+        }
+
+        /* Task Card Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-collapse {
+                padding-top: 1rem;
+            }
+            .nav-link {
+                margin-bottom: 0.5rem;
+            }
+            .board-container {
+                padding: 1rem 0.75rem;
+            }
+            .column, .add-column {
+                min-width: 280px;
+            }
         }
     </style>
 </head>
-<body>
 
-<nav>
-    <a sec:authorize="isAnonymous()" class="btn btn-signup d-none d-md-block" href="/login">Login</a>
-    <a sec:authorize="isAuthenticated()" class="btn btn-signup d-none d-md-block" href="/profile">Profile</a>
+<body>
+<!-- Main Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/static">
+            <i class="fas fa-tasks"></i>
+            <span>TaskFlow</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/static">
+                        <i class="fas fa-list-check"></i>
+                        Tasks
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <img th:src="'this.src=\'/images/default-profile-picture.png\';'" alt="User" class="user-avatar">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/profile}">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a></li>
+                        <li><a class="dropdown-item" th:href="@{/settings}">
+                            <i class="fas fa-cog me-2"></i> Settings
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button class="dropdown-item" type="submit">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
-<h1>Home Page</h1>
+<!-- Main Content -->
+<div class="board-container">
+    <!-- Columns -->
+    <div th:each="column : ${columns}" class="column" th:attr="data-column-id=${column.id}">
+        <div class="column-header">
+            <div class="column-title">
+                <span th:text="${column.name}">Column Name</span>
+            </div>
+            <div class="column-actions">
+                <span class="badge rounded-pill"
+                      th:classappend="${!column.inActive} ? 'bg-success' : 'bg-secondary'"
+                      th:text="${!column.inActive} ? 'Active' : 'Inactive'"></span>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <form th:action="@{'/columns/delete/' + ${column.id}}" method="post">
+                                <button class="dropdown-item text-danger" type="submit">
+                                    <i class="fas fa-trash me-2"></i> Delete Column
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="column-tasks" th:attr="data-column-id=${column.id}">
+            <div th:each="task : ${tasks}" th:if="${task.column.id == column.id}"
+                 class="task-card" th:attr="data-task-id=${task.id}" draggable="true">
 
+                <!-- Task Image (if available) -->
+                <img th:src="'this.src=\'/images/default-profile-picture.png\';'" class="task-img" th:alt="${task.name}">
+
+                <h6 class="task-title" th:text="${task.name}">Task Title</h6>
+                <p class="task-description" th:text="${task.description}">Task description goes here...</p>
+
+                <div class="task-footer">
+                    <div class="task-assignee">
+                        <img th:src="'this.src=\'/images/default-profile-picture.png\';'" class="assignee-avatar" alt="userPhoto">
+                        <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
+                    </div>
+                    <div class="task-actions">
+                        <a href="/tasks/edit/" class="btn btn-sm btn-outline-primary"
+                           data-bs-toggle="tooltip" data-bs-title="Edit Task">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="/tasks/comments/" class="btn btn-sm btn-outline-info"
+                           data-bs-toggle="tooltip" data-bs-title="Comments">
+                            <i class="fas fa-comments"></i>
+                        </a>
+                        <form action="/tasks/delete/" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="tooltip" data-bs-title="Delete Task">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Drag and Drop JS -->
+<script src="/js/home.js"></script>
 </body>
 </html>
