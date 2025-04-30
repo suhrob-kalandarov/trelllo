@@ -26,12 +26,19 @@ public class TaskColumnController {
         // Create new column
         TaskColumn column = new TaskColumn();
         column.setName(name);
-        column.setInActive(!active); // <-- Diqqat: inversiya
+        column.setInActive(!active);
         column.setPosition(newPosition);
 
         taskColumnRepository.save(column);
 
         redirectAttributes.addFlashAttribute("successMessage", "Column created successfully");
+        return "redirect:/";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteColumn(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        taskColumnRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Column deleted successfully");
         return "redirect:/";
     }
 }
