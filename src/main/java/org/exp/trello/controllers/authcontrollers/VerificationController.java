@@ -28,7 +28,10 @@ public class VerificationController {
         }
         User sessionUser = (User) user;
         String code = String.valueOf((int)(Math.random() * 9000) + 1000);
-        emailService.sendVerificationCode(sessionUser.getEmail(), code);
+        Thread thread = new Thread(() -> {
+            emailService.sendVerificationCode(sessionUser.getEmail(), code);
+        });
+        thread.start();
         session.setAttribute("verificationCode", code);
         return "auth/verification";
     }
