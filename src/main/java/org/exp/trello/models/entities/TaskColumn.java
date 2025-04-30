@@ -20,7 +20,4 @@ public class TaskColumn extends BaseEntity {
 
     @Column(name = "position_number")
     private Integer position;
-
-    @Column(name = "in_active")
-    private Boolean inActive = false;
 }

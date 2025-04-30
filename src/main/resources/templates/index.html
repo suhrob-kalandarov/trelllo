@@ -64,8 +64,9 @@
 
 <!-- Main Content -->
 <div class="board-container">
+
     <!-- Columns -->
-    <div th:each="column : ${columns}" class="column" th:attr="data-column-id=${column.id}">
+    <div th:each="column : ${activeColumns}" class="column" th:attr="data-column-id=${column.id}">
         <div class="column-header">
             <div class="column-title">
                 <span th:text="${column.name}">Column Name</span>
@@ -73,16 +74,34 @@
             <div class="column-actions">
                 <span class="badge rounded-pill"
                       th:classappend="${!column.inActive} ? 'bg-success' : 'bg-secondary'"
-                      th:text="${!column.inActive} ? 'Active' : 'Inactive'"></span>
+                      th:text="${!column.inActive} ? 'Active' : 'Inactive'">
+                </span>
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-h"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                            <form th:action="@{'/columns/delete/' + ${column.id}}" method="post">
+                            <form action="/" method="post">
+                                <button class="dropdown-item text-success" type="submit">
+                                    <i class="fas fa-edit me-2"></i> Edit Column
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form action="/" method="post">
                                 <button class="dropdown-item text-danger" type="submit">
                                     <i class="fas fa-trash me-2"></i> Delete Column
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form action="/" method="post">
+                                <button class="dropdown-item text-success" type="submit">
+                                    <i class="fas fa-plus me-2"></i> Add Task
                                 </button>
                             </form>
                         </li>
@@ -90,31 +109,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- All Tasks -->
         <div class="column-tasks" th:attr="data-column-id=${column.id}">
-            <div th:each="task : ${tasks}" th:if="${task.column.id == column.id}"
+            <div th:each="task : ${activeTasks}" th:if="${task.column.id == column.id}"
                  class="task-card" th:attr="data-task-id=${task.id}" draggable="true">
 
                 <!-- Task Image (if available) -->
-                <img th:src="'this.src=\'/images/default-profile-picture.png\';'" class="task-img" th:alt="${task.name}">
+                <img th:if="${task.attachment != null}" th:src="@{'/api/attachments/' + ${task.attachment.id}}" class="task-img" th:alt="${task.name}">
 
                 <h6 class="task-title" th:text="${task.name}">Task Title</h6>
                 <p class="task-description" th:text="${task.description}">Task description goes here...</p>
 
                 <div class="task-footer">
                     <div class="task-assignee">
-                        <img th:src="'this.src=\'/images/default-profile-picture.png\';'" class="assignee-avatar" alt="userPhoto">
+                        <img th:src="@{'/api/attachments/' + ${task.user?.attachment?.id}}" th:onerror="'this.src=\'/img/default-avatar.png\';'" class="assignee-avatar"
+                             th:alt="${task.user?.username ?: 'Unassigned'}">
                         <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
                     </div>
                     <div class="task-actions">
-                        <a href="/tasks/edit/" class="btn btn-sm btn-outline-primary"
-                           data-bs-toggle="tooltip" data-bs-title="Edit Task">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="/tasks/comments/" class="btn btn-sm btn-outline-info"
+                        <a th:href="@{'/tasks/comments/' + ${task.id}}" class="btn btn-sm btn-outline-info"
                            data-bs-toggle="tooltip" data-bs-title="Comments">
                             <i class="fas fa-comments"></i>
                         </a>
-                        <form action="/tasks/delete/" method="post" class="d-inline">
+                        <a th:href="@{'/tasks/edit/' + ${task.id}}" class="btn btn-sm btn-outline-primary"
+                           data-bs-toggle="tooltip" data-bs-title="Edit Task">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form th:action="@{'/tasks/delete/' + ${task.id}}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-outline-danger"
                                     data-bs-toggle="tooltip" data-bs-title="Delete Task">
                                 <i class="fas fa-trash"></i>
@@ -125,12 +147,10 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Drag and Drop JS -->
-<script src="/js/home.js"></script>
 </body>
 </html>
