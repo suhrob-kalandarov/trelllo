@@ -38,7 +38,7 @@ public class RegisterController {
             return "auth/login";
         }
 
-        if (!user.getPassword().equals(user.getRepeatPassword())) {
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
             model.addAttribute("error", "Passwords do not match!");
             return "auth/register";
         }
