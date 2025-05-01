@@ -134,4 +134,20 @@ public class TaskController {
         redirectAttributes.addFlashAttribute("successMessage", "Task updated successfully");
         return "redirect:/";
     }
+
+    @GetMapping("/comments/{id}")
+    public String showComments(@PathVariable Integer id, Model model, @AuthenticationPrincipal User currentUser) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            model.addAttribute("task", task);
+            model.addAttribute("comments", task.getComments());
+            model.addAttribute("user", currentUser);
+            return "comments";
+        } else {
+            return "redirect:/";
+        }
+    }
+
 }
