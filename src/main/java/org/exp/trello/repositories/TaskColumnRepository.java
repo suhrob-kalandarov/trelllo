@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TaskColumnRepository extends JpaRepository<TaskColumn, Integer> {
-    List<TaskColumn> findAllByInActiveTrueOrderByPositionAsc();
 
     @Query("SELECT MAX(c.position) FROM TaskColumn c")
     Integer findMaxPosition();
+
+    List<TaskColumn> findAllByActiveTrueOrderByPositionAsc();
+
+    List<TaskColumn> findAllByActiveFalseOrderByPositionAsc();
 }

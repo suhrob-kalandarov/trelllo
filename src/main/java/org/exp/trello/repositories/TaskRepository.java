@@ -10,8 +10,10 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    List<Task> findAllByInActiveTrue();
+    List<Task> findAllByActiveTrue();
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.column.id = :columnId")
     Long countByColumnId(@Param("columnId") Integer columnId);
+
+    List<Task> findAllByColumnId(Integer columnId);
 }

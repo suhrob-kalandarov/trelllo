@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,6 +28,9 @@ public class TaskController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AttachmentService attachmentService;
 
     @PostMapping
     public String createTask(@RequestParam String name,
@@ -57,6 +61,7 @@ public class TaskController {
         task.setDescription(description);
         task.setColumn(columnOpt.get());
         task.setUser(assignee);
+        task.setActive(true);
 
         if (deadline != null) {
             task.setDeadline(deadline);
@@ -68,5 +73,65 @@ public class TaskController {
         return "redirect:/";
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model) {
+        Optional<Task> taskOpt = taskRepository.findById(id);
 
+        if (taskOpt.isPresent()) {
+            model.addAttribute("task", taskOpt.get());
+            model.addAttribute("columns", taskColumnRepository.findAll());
+            model.addAttribute("users", userRepository.findAll());
+            return "task/edit-task";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateTask(@PathVariable Integer id,
+                             @RequestParam String name,
+                             @RequestParam(required = false) String description,
+                             @RequestParam Integer columnId,
+                             @RequestParam(required = false) Integer userId,
+                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline,
+                             @RequestParam(required = false) MultipartFile image,
+                             RedirectAttributes redirectAttributes) throws IOException {
+
+        Optional<Task> taskOpt = taskRepository.findById(id);
+        if (taskOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Task not found");
+            return "redirect:/";
+        }
+
+        Task task = taskOpt.get();
+        task.setName(name);
+        task.setDescription(description);
+
+        Optional<TaskColumn> columnOpt = taskColumnRepository.findById(columnId);
+        if (columnOpt.isPresent()) {
+            task.setColumn(columnOpt.get());
+        }
+
+        if (userId != null) {
+            Optional<User> userOpt = userRepository.findById(userId);
+            if (userOpt.isPresent()) {
+                task.setUser(userOpt.get());
+            }
+        }
+
+        if (deadline != null) {
+            task.setDeadline(deadline);
+        }
+
+        // Handle image upload
+        if (image != null && !image.isEmpty()) {
+            Attachment attachment = attachmentService.saveAttachment(image);
+            task.setAttachment(attachment);
+        }
+
+        taskRepository.save(task);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Task updated successfully");
+        return "redirect:/";
+    }
 }
