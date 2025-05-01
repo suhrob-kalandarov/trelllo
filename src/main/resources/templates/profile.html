@@ -102,7 +102,7 @@
                     
                     <div class="profile-body">
                         <!-- Profile Avatar -->
-                        <div class="profile-avatar-container" onclick="document.getElementById('avatarUpload').click()">
+                        <div class="profile-avatar-container">
                             <img th:if="${user.attachment != null}"
                                  th:src="@{'/attachment/get/' + ${user.attachment.id}}"
                                  alt="Profile" class="profile-avatar"
@@ -118,7 +118,7 @@
                         </div>
                         
                         <!-- Profile Name -->
-                        <h2 class="profile-name" th:text="${user.username}">Username</h2>
+                        <h2 class="profile-name" th:text="${user.getName()}">Username</h2>
                         
                         <!-- Profile Email -->
                         <div class="profile-email" th:text="${user.email}">user@example.com</div>
@@ -165,7 +165,7 @@
                         <div class="profile-info">
                             <div class="info-item">
                                 <div class="info-label">Username</div>
-                                <div class="info-value" th:text="${user.username}"></div>
+                                <div class="info-value" th:text="${user.getName()}"></div>
                             </div>
                             <div class="info-item">
                                 <div class="info-label">Email</div>
@@ -197,34 +197,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Recent Activity -->
-<!--                <div class="profile-activity-card mt-4">-->
-<!--                    <div class="card-header">-->
-<!--                        <h5 class="card-title">-->
-<!--                            <i class="fas fa-history me-2"></i>-->
-<!--                            Recent Activity-->
-<!--                        </h5>-->
-<!--                    </div>-->
-<!--                    <div class="card-body">-->
-<!--                        <div th:if="${#lists.isEmpty(recentActivities)}" class="text-center py-4 text-muted">-->
-<!--                            <i class="fas fa-inbox fa-3x mb-3"></i>-->
-<!--                            <p>No recent activity</p>-->
-<!--                        </div>-->
-<!--                        -->
-<!--                        <ul th:unless="${#lists.isEmpty(recentActivities)}" class="activity-list">-->
-<!--                            <li th:each="activity : ${recentActivities}" class="activity-item">-->
-<!--                                <div class="activity-icon" th:classappend="${activity.type == 'TASK_CREATED' ? 'bg-success' : activity.type == 'TASK_COMPLETED' ? 'bg-primary' : 'bg-info'}">-->
-<!--                                    <i th:class="${activity.type == 'TASK_CREATED' ? 'fas fa-plus' : activity.type == 'TASK_COMPLETED' ? 'fas fa-check' : 'fas fa-comment'}"></i>-->
-<!--                                </div>-->
-<!--                                <div class="activity-content">-->
-<!--                                    <div class="activity-title" th:text="${activity.description}">Activity description</div>-->
-<!--                                    <div class="activity-time" th:text="${#temporals.format(activity.createdAt, 'MMM dd, yyyy HH:mm')}">Jan 1, 2023 12:00</div>-->
-<!--                                </div>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
+
             </div>
         </div>
     </div>
@@ -238,8 +211,9 @@
                 <h5 class="modal-title">Edit Profile</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data">
+            <form th:action="@{'/profile/update'}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="id" th:value="${user.id}" />
                 <div class="modal-body">
                     <!-- Avatar Upload -->
                     <div class="mb-3">
@@ -247,24 +221,13 @@
                         <input type="file" class="form-control" id="avatarUpload" name="avatar" accept="image/*">
                         <div class="form-text">Leave empty to keep current picture</div>
                     </div>
-                    
+
                     <!-- Username -->
                     <div class="mb-3">
                         <label class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" th:value="${user.username}" required>
+                        <input type="text" class="form-control" name="username" th:value="${user.getName()}" required>
                     </div>
-                    
-<!--                    &lt;!&ndash; Email &ndash;&gt;-->
-<!--                    <div class="mb-3">-->
-<!--                        <label class="form-label">Email</label>-->
-<!--                        <input type="email" class="form-control" name="email" th:value="${user.email}" required>-->
-<!--                    </div>-->
-<!--                    -->
-<!--                    &lt;!&ndash; Current Password (for verification) &ndash;&gt;-->
-<!--                    <div class="mb-3">-->
-<!--                        <label class="form-label">Current Password</label>-->
-<!--                        <input type="password" class="form-control" name="currentPassword" placeholder="Enter your current password to confirm changes">-->
-<!--                    </div>-->
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -275,44 +238,6 @@
     </div>
 </div>
 
-<!-- Change Password Modal -->
-<!--<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title">Change Password</h5>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <form th:action="@{/profile/change-password}" method="post">-->
-<!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
-<!--                <div class="modal-body">-->
-<!--                    &lt;!&ndash; Current Password &ndash;&gt;-->
-<!--                    <div class="mb-3">-->
-<!--                        <label class="form-label">Current Password</label>-->
-<!--                        <input type="password" class="form-control" name="currentPassword" required>-->
-<!--                    </div>-->
-<!--                    -->
-<!--                    &lt;!&ndash; New Password &ndash;&gt;-->
-<!--                    <div class="mb-3">-->
-<!--                        <label class="form-label">New Password</label>-->
-<!--                        <input type="password" class="form-control" name="password" required minlength="6">-->
-<!--                        <div class="form-text">Password must be at least 6 characters</div>-->
-<!--                    </div>-->
-<!--                    -->
-<!--                    &lt;!&ndash; Confirm New Password &ndash;&gt;-->
-<!--                    <div class="mb-3">-->
-<!--                        <label class="form-label">Confirm New Password</label>-->
-<!--                        <input type="password" class="form-control" name="confirmPassword" required minlength="6">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>-->
-<!--                    <button type="submit" class="btn btn-primary">Change Password</button>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

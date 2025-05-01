@@ -79,10 +79,6 @@
     transition: var(--transition);
 }
 
-.profile-avatar-container:hover .profile-avatar-overlay {
-    opacity: 1;
-}
-
 .profile-avatar-container:hover .profile-avatar {
     transform: scale(1.05);
 }
