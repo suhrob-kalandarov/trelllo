@@ -552,6 +552,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Comment Form -->
+                            <form th:action="@{'/comments/add/' + ${task.id}}" method="post" class="comment-form">
+                                <input type="text" class="comment-input" name="text" placeholder="Write a comment..." required>
+                                <button type="submit" class="comment-send">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

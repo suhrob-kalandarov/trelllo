@@ -172,7 +172,7 @@
                         <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
                     </div>
                     <div class="task-actions">
-                        <a th:href="@{'/task/comments/' + ${task.id}}" class="btn btn-sm btn-outline-info"
+                        <a th:href="@{'/comments/show/' + ${task.id}}" class="btn btn-sm btn-outline-info"
                            data-bs-toggle="tooltip" data-bs-title="Comments">
                             <i class="fas fa-comments"></i>
                         </a>
