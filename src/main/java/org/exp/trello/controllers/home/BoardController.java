@@ -28,8 +28,8 @@ public class BoardController {
     @GetMapping("/")
     public String showBoard(Model model,@AuthenticationPrincipal User user) {
 
-        List<TaskColumn> activeColumns = taskColumnRepository.findAllByInActiveTrueOrderByPositionAsc();
-        List<Task> activeTasks = taskRepository.findAllByInActiveTrue();
+        List<TaskColumn> activeColumns = taskColumnRepository.findAllByActiveTrueOrderByPositionAsc();
+        List<Task> activeTasks = taskRepository.findAllByActiveTrue();
         List<User> users = userRepository.findAll();
 
         model.addAttribute("activeColumns", activeColumns);

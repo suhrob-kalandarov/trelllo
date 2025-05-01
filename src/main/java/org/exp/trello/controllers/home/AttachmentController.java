@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/attachments")
+@RequestMapping("/attachment")
 @RequiredArgsConstructor
 public class AttachmentController {
 
     private final AttachmentRepository attachmentRepository;
     private final AttachmentService attachmentService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable Integer id) {
         Optional<Attachment> attachmentOpt = attachmentRepository.findById(id);
         if (attachmentOpt.isPresent()) {
