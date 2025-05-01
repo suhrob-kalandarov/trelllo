@@ -16,4 +16,10 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Long countByColumnId(@Param("columnId") Integer columnId);
 
     List<Task> findAllByColumnId(Integer columnId);
+
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.user.id = :userId")
+    Integer findCountByUserId(Integer userId);
+
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.user.id = :userId and t.active=true")
+    Integer findCountByUserIdAndActiveTrue(Integer userId);
 }
