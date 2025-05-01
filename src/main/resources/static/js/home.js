@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
 
         // Send AJAX request
-        fetch('/tasks/move', {
+        fetch('/task/move', {  // Changed from '/tasks/move' to '/task/move'
             method: 'POST',
             body: formData,
             headers: {
@@ -105,6 +105,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Task moved successfully:', data);
 
+                // Update task count in column headers
+                updateColumnTaskCounts();
+
                 // Show success notification
                 showNotification('Task moved successfully', 'success');
             })
@@ -114,6 +117,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show error notification
                 showNotification('Error moving task. Please try again.', 'danger');
             });
+    }
+
+    // Function to update column task counts
+    function updateColumnTaskCounts() {
+        const columns = document.querySelectorAll('.column');
+
+        columns.forEach(column => {
+            const columnId = column.getAttribute('data-column-id');
+            const taskCount = column.querySelectorAll('.task-card').length;
+            const countElement = column.querySelector('.column-title-count');
+
+            if (countElement) {
+                countElement.textContent = taskCount;
+            }
+        });
     }
 
     // Function to show notifications
