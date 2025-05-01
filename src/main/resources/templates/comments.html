@@ -54,8 +54,16 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                        <img th:src="${user?.attachment ?: '/img/default-avatar.png'}" alt="User" class="user-avatar">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                       data-bs-toggle="dropdown">
+                        <img th:if="${task.user?.attachment != null}"
+                             th:src="@{'/attachment/get/' + ${task.user.attachment.id}}"
+                             alt="User" class="user-avatar"
+                             onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                        <img th:unless="${task.user?.attachment != null}"
+                             src="/images/default-avatar.png"
+                             alt="User" class="user-avatar">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/profile}">
@@ -64,7 +72,9 @@
                         <li><a class="dropdown-item" th:href="@{/settings}">
                             <i class="fas fa-cog me-2"></i> Settings
                         </a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li>
                             <form th:action="@{/logout}" method="post">
                                 <button class="dropdown-item" type="submit">
@@ -96,7 +106,12 @@
                     </div>
                     <div class="card-body">
                         <!-- Task Image (if available) -->
-                        <img th:if="${task.attachment != null}" th:src="${task.attachment}" class="task-img" th:alt="${task.name}">
+                        <!--<img th:if="${task.attachment != null}" th:src="${task.attachment}" class="task-img"
+                             th:alt="${task.name}">-->
+
+                        <img th:if="${task.attachment != null}" th:src="@{'/attachment/get/' + ${task.attachment.id}}"
+                             class="task-img" th:alt="${task.name}">
+
 
                         <h2 class="task-title" th:text="${task.name}">Task Title</h2>
                         <p class="task-description" th:text="${task.description}">Task description goes here...</p>
@@ -117,10 +132,18 @@
                         </div>
 
                         <div class="task-assignee">
-                            <img th:src="${task.user?.attachment ?: '/img/default-avatar.png'}" class="assignee-avatar"
-                                 th:alt="${task.user?.username ?: 'Unassigned'}">
+                            <img th:if="${task.user?.attachment != null}"
+                                 th:src="@{'/attachment/get/' + ${task.user.attachment.id}}"
+                                 alt="User" class="user-avatar"
+                                 onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                            <img th:unless="${task.user?.attachment != null}"
+                                 src="/images/default-avatar.png"
+                                 alt="User" class="user-avatar">
+
                             <div>
-                                <div class="assignee-name" th:text="${task.user?.username ?: 'Unassigned'}">John Doe</div>
+                                <div class="assignee-name" th:text="${task.user?.username ?: 'Unassigned'}">John Doe
+                                </div>
                                 <div class="assignee-role" th:text="${task.user?.roles ?: ''}">Developer</div>
                             </div>
                         </div>
@@ -150,24 +173,35 @@
                                 </div>
 
                                 <div th:each="comment : ${comments}" class="comment">
-                                    <img th:src="${comment.user.attachment ?: '/img/default-avatar.png'}" class="comment-avatar"
-                                         th:alt="${comment.user.username}">
+                                    <img th:if="${task.user?.attachment != null}"
+                                         th:src="@{'/attachment/get/' + ${task.user.attachment.id}}"
+                                         alt="User" class="user-avatar"
+                                         onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                                    <img th:unless="${task.user?.attachment != null}"
+                                         src="/images/default-avatar.png"
+                                         alt="User" class="user-avatar">
+
                                     <div class="comment-content">
                                         <div class="comment-header">
-                                            <div class="comment-author" th:text="${comment.user.username}">John Doe</div>
-                                            <div class="comment-time" th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy HH:mm')}">
+                                            <div class="comment-author" th:text="${comment.user.username}">John Doe
+                                            </div>
+                                            <div class="comment-time"
+                                                 th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy HH:mm')}">
                                                 Jan 01, 2023 12:00
                                             </div>
                                         </div>
                                         <div class="comment-text" th:text="${comment.text}">
-                                            This is a comment text. It can be quite long and will wrap to multiple lines if needed.
+                                            This is a comment text. It can be quite long and will wrap to multiple lines
+                                            if needed.
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Comment Form -->
                             <form th:action="@{'/comments/add/' + ${task.id}}" method="post" class="comment-form">
-                                <input type="text" class="comment-input" name="text" placeholder="Write a comment..." required>
+                                <input type="text" class="comment-input" name="text" placeholder="Write a comment..."
+                                       required>
                                 <button type="submit" class="comment-send">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
