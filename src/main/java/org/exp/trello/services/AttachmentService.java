@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class AttachmentService {
@@ -33,5 +34,29 @@ public class AttachmentService {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Update an existing attachment
+     */
+    public Attachment updateAttachment(Attachment attachment, MultipartFile file) throws IOException {
+        //attachment.setFileName(file.getOriginalFilename());
+        //attachment.setFileType(file.getContentType());
+        attachment.setContent(file.getBytes());
+        return attachmentRepository.save(attachment);
+    }
+
+    /**
+     * Find attachment by ID
+     */
+    public Optional<Attachment> findById(Integer id) {
+        return attachmentRepository.findById(id);
+    }
+
+    /**
+     * Delete attachment
+     */
+    public void deleteAttachment(Integer id) {
+        attachmentRepository.deleteById(id);
     }
 }
