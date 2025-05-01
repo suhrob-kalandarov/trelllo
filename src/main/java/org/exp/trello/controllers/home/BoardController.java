@@ -1,5 +1,6 @@
 package org.exp.trello.controllers.home;
 
+import jakarta.servlet.http.HttpSession;
 import org.exp.trello.models.entities.Task;
 import org.exp.trello.models.entities.TaskColumn;
 import org.exp.trello.models.entities.User;
@@ -26,7 +27,7 @@ public class BoardController {
     private UserRepository userRepository;
 
     @GetMapping("/")
-    public String showBoard(Model model,@AuthenticationPrincipal User user) {
+    public String showBoard(Model model, @AuthenticationPrincipal User user, HttpSession session) {
 
         List<TaskColumn> activeColumns = taskColumnRepository.findAllByActiveTrueOrderByPositionAsc();
         List<Task> activeTasks = taskRepository.findAllByActiveTrue();
@@ -36,6 +37,7 @@ public class BoardController {
         model.addAttribute("activeTasks", activeTasks);
         model.addAttribute("users", users);
         model.addAttribute("currentUser", user);
+        session.setAttribute("user",user);
 
         return "index";
     }
