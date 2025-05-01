@@ -38,6 +38,7 @@ public class TaskController {
                              @RequestParam Integer columnId,
                              @RequestParam(required = false) Integer userId,
                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline,
+                             @RequestParam(required = false) MultipartFile image,
                              @AuthenticationPrincipal User currentUser,
                              RedirectAttributes redirectAttributes
     ) throws IOException {
@@ -65,6 +66,11 @@ public class TaskController {
 
         if (deadline != null) {
             task.setDeadline(deadline);
+        }
+
+        if (image != null && !image.isEmpty()) {
+            Attachment attachment = attachmentService.saveAttachment(image);
+            task.setAttachment(attachment);
         }
 
         taskRepository.save(task);
@@ -108,22 +114,17 @@ public class TaskController {
         task.setDescription(description);
 
         Optional<TaskColumn> columnOpt = taskColumnRepository.findById(columnId);
-        if (columnOpt.isPresent()) {
-            task.setColumn(columnOpt.get());
-        }
+        columnOpt.ifPresent(task::setColumn);
 
         if (userId != null) {
             Optional<User> userOpt = userRepository.findById(userId);
-            if (userOpt.isPresent()) {
-                task.setUser(userOpt.get());
-            }
+            userOpt.ifPresent(task::setUser);
         }
 
         if (deadline != null) {
             task.setDeadline(deadline);
         }
 
-        // Handle image upload
         if (image != null && !image.isEmpty()) {
             Attachment attachment = attachmentService.saveAttachment(image);
             task.setAttachment(attachment);
@@ -133,5 +134,21 @@ public class TaskController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Task updated successfully");
         return "redirect:/";
+    }
+
+    @PostMapping("/move")
+    @ResponseBody
+    public String moveTask(@RequestParam Integer taskId, @RequestParam Integer columnId) {
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+        Optional<TaskColumn> columnOpt = taskColumnRepository.findById(columnId);
+
+        if (taskOpt.isPresent() && columnOpt.isPresent()) {
+            Task task = taskOpt.get();
+            task.setColumn(columnOpt.get());
+            taskRepository.save(task);
+            return "{\"success\": true}";
+        }
+
+        return "{\"success\": false}";
     }
 }
