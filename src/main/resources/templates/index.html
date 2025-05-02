@@ -96,7 +96,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/tasks}">
+                <a class="nav-link" th:href="@{/}">
                     <i class="fas fa-tasks me-1"></i> Tasks
                 </a>
             </li>
@@ -160,7 +160,9 @@
                  class="task-card" th:attr="data-task-id=${task.id}" draggable="true">
 
                 <!-- Task Image (if available) -->
-                <img th:if="${task.attachment != null}" th:src="@{'/attachment/get' + ${task.attachment.id}}"
+                <!--<img th:if="${task.attachment != null}" th:src="@{'/attachment/get' + ${task.attachment.id}}"
+                     class="task-img" th:alt="${task.name}">-->
+                <img th:if="${task.attachment != null}" th:src="@{'/attachment/get/' + ${task.attachment.id}}"
                      class="task-img" th:alt="${task.name}">
 
                 <h6 class="task-title" th:text="${task.name}">Task Title</h6>
@@ -173,7 +175,14 @@
                              class="assignee-avatar"
                              th:alt="${task.user?.username ?: 'Unassigned'}"
                              onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                        <img th:unless="${task.user?.attachment != null}"
+                             class="assignee-avatar"
+                             src="/images/default-avatar.png"
+                             alt="user img">
+
                         <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
+
                     </div>
                     <div class="task-actions">
                         <a th:href="@{'/comments/show/' + ${task.id}}" class="btn btn-sm btn-outline-info"

@@ -42,7 +42,6 @@ public class VerificationController {
         Object user = session.getAttribute("user");
 
         if (user == null) {
-            System.out.println("user = " + user);
             return "redirect:/auth/login";
         }
 
@@ -54,7 +53,7 @@ public class VerificationController {
             return "auth/verification";
         }
 
-        registeredUser.setVerified(true);
+        registeredUser.setActive(true);
         User save = userRepository.save(registeredUser);
 
         System.out.println("registeredUser = " + registeredUser);

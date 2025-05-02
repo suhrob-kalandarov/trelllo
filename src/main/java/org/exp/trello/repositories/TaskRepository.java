@@ -1,6 +1,7 @@
 package org.exp.trello.repositories;
 
 import org.exp.trello.models.entities.Task;
+import org.exp.trello.models.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +23,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.user.id = :userId and t.active=true")
     Integer findCountByUserIdAndActiveTrue(Integer userId);
+
+    List<Task> streamTasksByUser(User user);
+
+    List<Task> findAllByUser(User user);
 }
