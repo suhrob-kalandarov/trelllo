@@ -76,6 +76,7 @@ public class TeamController {
             @RequestParam("email") String email,
             @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "verified", required = false) Boolean verified,
+            @RequestParam(value = "active", required = false) Boolean active,
             @RequestParam(value = "avatar", required = false) MultipartFile avatarFile,
             RedirectAttributes redirectAttributes) {
 
@@ -95,6 +96,9 @@ public class TeamController {
 
             // Update verification status
             user.setVerified(verified != null && verified);
+
+            // Update user active status
+            user.setActive(active != null && active);
 
             // Update password if provided
             if (password != null && !password.isEmpty()) {

@@ -34,6 +34,8 @@ public class User extends BaseEntity implements UserDetails {
     @NotBlank(message = "Email must not be blank")
     private String email;
 
+    private boolean verified = false;
+
     @NotNull
     @Size(min = 6, message = "Password should have at least 6 characters")
     private String password;
@@ -46,13 +48,9 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<UserRole> roles;
 
-
     @Transient
     @Size(min = 6, message = "Not matches")
     private String confirmPassword;
-
-    @Transient
-    private boolean verified = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
