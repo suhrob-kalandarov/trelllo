@@ -38,5 +38,6 @@ public class Task extends BaseEntity {
     private User user;
 
     @OneToMany
+    @JoinColumn(name = "task_id")
     private List<Comment> comments;
 }

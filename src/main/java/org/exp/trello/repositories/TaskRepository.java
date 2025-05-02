@@ -8,10 +8,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
     List<Task> findAllByActiveTrue();
+
+    @Query("SELECT t FROM Task t LEFT JOIN FETCH t.comments WHERE t.id = :id")
+    Optional<Task> findByIdWithComments(@Param("id") Integer id);
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.column.id = :columnId")
     Long countByColumnId(@Param("columnId") Integer columnId);
