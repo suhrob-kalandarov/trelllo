@@ -54,6 +54,7 @@ public class VerificationController {
         }
 
         registeredUser.setActive(true);
+        registeredUser.setVerified(true);
         User save = userRepository.save(registeredUser);
 
         System.out.println("registeredUser = " + registeredUser);
