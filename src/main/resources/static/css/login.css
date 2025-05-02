@@ -87,7 +87,7 @@ body {
 
 .image-section {
     flex: 1;
-    background: #e5e7eb url('/images/login-background.png') no-repeat center center;
+    background: #e5e7eb url('/images/login-background.gif') no-repeat center center;
     background-size: cover;
     display: flex;
     align-items: center;

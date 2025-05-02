@@ -61,7 +61,7 @@ body {
 
 .image-section {
     flex: 1;
-    background: url('/images/register-background.jpeg') no-repeat center center;
+    background: url('/images/register-background.gif') no-repeat center center;
     background-size: cover;
 }
 
