@@ -201,14 +201,3 @@ document.getElementById('activeSwitch').addEventListener('change', function () {
         label.textContent = 'Inactive';
     }
 });
-
-// Modal ochilganda task nomini va id sini joylash
-const deleteTaskModal = document.getElementById('deleteTaskModal');
-deleteTaskModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-    const taskId = button.getAttribute('data-task-id');
-    const taskName = button.getAttribute('data-task-name');
-
-    deleteTaskModal.querySelector('#deleteTaskId').value = taskId;
-    deleteTaskModal.querySelector('#deleteTaskName').textContent = taskName;
-});

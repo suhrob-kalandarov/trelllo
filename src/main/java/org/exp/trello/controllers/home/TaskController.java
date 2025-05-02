@@ -157,6 +157,7 @@ public class TaskController {
 
     @PostMapping("/delete/{id}")
     public String deleteColumn(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        System.out.println("id = " + id);
         Optional<Task> optionalTask = taskRepository.findByIdWithComments(id);
 
         if (optionalTask.isEmpty()){
