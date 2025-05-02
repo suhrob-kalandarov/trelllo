@@ -191,3 +191,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100 * index);
     });
 });
+
+// Update the label text when the switch changes
+document.getElementById('activeSwitch').addEventListener('change', function () {
+    const label = document.getElementById('activeSwitchLabel').querySelector('span');
+    if (this.checked) {
+        label.textContent = 'Active';
+    } else {
+        label.textContent = 'Inactive';
+    }
+});

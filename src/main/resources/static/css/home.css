@@ -360,6 +360,38 @@ body {
     transform: rotate(90deg);
 }
 
+/* Add Task */
+.add-task {
+    background: rgba(237, 242, 247, 0.5);
+    border: 2px dashed #cbd5e0;
+    color: var(--text-light);
+    min-width: 300px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.add-task:hover {
+    background: rgba(237, 242, 247, 0.8);
+    border-color: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.add-task i {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    transition: var(--transition);
+}
+
+.add-task:hover i {
+    transform: rotate(90deg);
+}
+
 /* Modal */
 .modal-content {
     border-radius: var(--border-radius);
