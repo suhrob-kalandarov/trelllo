@@ -94,20 +94,20 @@
             </div>
         </div>
 
-        <!--&lt;!&ndash; Success Message &ndash;&gt;
+        <!-- Success Message -->
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i>
             <span th:text="${successMessage}">Success message</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        &lt;!&ndash; Error Message &ndash;&gt;
+        <!-- Error Message -->
         <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>
             <span th:text="${errorMessage}">Error message</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
--->
+
         <!-- Team Members Table -->
         <div class="card team-card">
             <div class="card-header">
@@ -160,24 +160,21 @@
                             </td>
                             <td>
                                 <div class="role-badges">
-                                        <span th:each="role : ${user.roles}"
-                                              th:text="${role}"
-                                              class="badge bg-primary me-1">ROLE</span>
+                                    <span th:each="role : ${user.roles}"
+                                          th:text="${role}"
+                                          class="badge bg-primary me-1">ROLE</span>
                                 </div>
                             </td>
                             <td>
-                                    <span th:if="${user.verified}" class="badge bg-success">
-                                        <i class="fas fa-check-circle me-1"></i> Verified
-                                    </span>
+                                <span th:if="${user.verified}" class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i> Verified</span>
                                 <span th:unless="${user.verified}" class="badge bg-warning">
-                                        <i class="fas fa-exclamation-circle me-1"></i> Not Verified
-                                    </span>
+                                    <i class="fas fa-exclamation-circle me-1"></i> Not Verified</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
                                     <a th:href="@{'/team/edit/' + ${user.id}}" class="btn btn-sm btn-info">
-                                        <i class="fas fa-edit me-1"></i> Edit Info
-                                    </a>
+                                        <i class="fas fa-edit me-1"></i> Edit Info</a>
                                     <button class="btn btn-sm btn-danger"
                                             data-bs-toggle="modal"
                                             data-bs-target="#deleteUserModal"
