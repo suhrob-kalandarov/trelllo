@@ -33,7 +33,7 @@ public class CommentController {
             model.addAttribute("task", task);
             model.addAttribute("comments", task.getComments());
             model.addAttribute("user", currentUser);
-            return "comments";
+            return "task/comments";
         } else {
             return "redirect:/";
         }
