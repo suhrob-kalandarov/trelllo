@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -31,6 +32,8 @@ public class TaskController {
 
     @Autowired
     private AttachmentService attachmentService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @PostMapping
     public String createTask(@RequestParam String name,
@@ -150,5 +153,29 @@ public class TaskController {
         }
 
         return "{\"success\": false}";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteColumn(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        Optional<Task> optionalTask = taskRepository.findByIdWithComments(id);
+
+        if (optionalTask.isEmpty()){
+            return "index";
+        }
+
+        Task task = optionalTask.get();
+
+        if (!task.getComments().isEmpty()) {
+            for (Comment comment : task.getComments()) {
+                comment.setActive(false);
+            }
+            commentRepository.saveAll(task.getComments());
+        }
+        task.setActive(false);
+        taskRepository.save(task);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Column deleted successfully");
+
+        return "redirect:/";
     }
 }
