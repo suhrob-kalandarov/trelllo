@@ -46,7 +46,9 @@
                         <img th:unless="${currentUser?.attachment != null}"
                              src="/images/default-avatar.png"
                              alt="User" class="user-avatar">
+                        <span th:text="${currentUser?.getName()}">username</span>
                     </a>
+
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{'/profile/'+${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
@@ -154,6 +156,11 @@
             </div>
         </div>
 
+        <!-- Add Task -->
+        <div class="add-column" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+            <i class="fas fa-plus"></i> Add Task
+        </div>
+
         <!-- All Tasks -->
         <div class="column-tasks" th:attr="data-column-id=${column.id}">
             <div th:each="task : ${activeTasks}" th:if="${task.column.id == column.id}"
@@ -181,7 +188,7 @@
                              src="/images/default-avatar.png"
                              alt="user img">
 
-                        <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
+                        <span th:text="${task.user?.getName() ?: 'Unassigned'}">Username</span>
 
                     </div>
                     <div class="task-actions">
@@ -201,6 +208,7 @@
                         </form>
                     </div>
                 </div>
+
                 <!-- Task Dates (moved to bottom) -->
                 <div class="task-dates mt-2">
                     <div class="task-date">
