@@ -188,7 +188,7 @@
                              src="/images/default-avatar.png"
                              alt="user img">
 
-                        <span th:text="${task.user?.username ?: 'Unassigned'}">Username</span>
+                        <span th:text="${task.user?.getName() ?: 'Unassigned'}">Username</span>
 
                     </div>
                     <div class="task-actions">
