@@ -516,8 +516,17 @@
                                 </div>
 
                                 <div th:each="comment : ${comments}" class="comment">
-                                    <img th:src="${comment.user.attachment ?: '/img/default-avatar.png'}" class="comment-avatar"
-                                         th:alt="${comment.user.getName()}">
+                                    <img th:if="${comment.user?.attachment != null}"
+                                         th:src="@{'/attachment/get/' + ${comment.user.attachment.id}}"
+                                         class="assignee-avatar"
+                                         th:alt="${comment.user?.getName ?: 'Unassigned'}"
+                                         onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                                    <img th:unless="${comment.user?.attachment != null}"
+                                         src="/images/default-avatar.png"
+                                         alt="User"
+                                         class="assignee-avatar">
+
                                     <div class="comment-content">
                                         <div class="comment-header">
                                             <div class="comment-author" th:text="${comment.user.getName()}">John Doe</div>
@@ -533,8 +542,9 @@
                             </div>
 
                             <!-- Comment Form -->
-                            <form th:action="@{'/tasks/comments/' + ${task.id} + '/add'}" method="post" class="comment-form">
-                                <input type="text" class="comment-input" name="text" placeholder="Write a comment..." required>
+                            <form th:action="@{'/comments/add/' + ${task.id}}" method="post" class="comment-form">
+                                <input type="text" class="comment-input" name="text" placeholder="Write a comment..."
+                                       required>
                                 <button type="submit" class="comment-send">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
