@@ -30,7 +30,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">
                         <i class="fas fa-columns"></i>
-                        Board
+                        Home
                     </a>
                 </li>
                 <li class="nav-item">
@@ -80,11 +80,12 @@
             <div class="d-flex align-items-center">
                 <div>
                     <h1 class="page-title">
+                        <i class="fas fa-edit me-2 text-primary"></i>
                         Edit User
                     </h1>
-                    <div class="position-absolute top-5 translate-middle-y" style="right: 200px; z-index: 1055;">
-                        <a th:href="@{/}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Back to Board
+                    <div class="position-absolute top-5 translate-middle-y" style=" top:200px; right: 200px; z-index: 1055;">
+                        <a href="/team" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Team Management
                         </a>
                     </div>
                     <p class="page-subtitle">Update user information and roles</p>
@@ -140,7 +141,7 @@
                                       th:text="${role}"
                                       class="badge bg-primary">ROLE</span>
                             </div>
-                            <a th:href="@{'/team/edit/' + ${user.id}}" class="btn btn-primary w-100">
+                            <a th:href="@{'/user/edit/' + ${user.id}}" class="btn btn-primary w-100">
                                 Edit Roles
                             </a>
                         </div>
@@ -184,7 +185,7 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/team/update}" method="post" enctype="multipart/form-data">
+                        <form th:action="@{/user/update}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="userId" th:value="${user.id}">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 

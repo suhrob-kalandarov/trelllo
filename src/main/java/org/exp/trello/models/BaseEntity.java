@@ -14,7 +14,7 @@ public class BaseEntity {
     private Integer id;
 
     @Column(name = "active")
-    private Boolean active = true;
+    private Boolean active = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
