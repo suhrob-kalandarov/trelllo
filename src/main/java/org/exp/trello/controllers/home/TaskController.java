@@ -1,5 +1,6 @@
 package org.exp.trello.controllers.home;
 
+import jakarta.servlet.http.HttpSession;
 import org.exp.trello.models.entities.*;
 import org.exp.trello.repositories.*;
 import org.exp.trello.services.AttachmentService;
@@ -42,7 +43,7 @@ public class TaskController {
                              @RequestParam(required = false) Integer userId,
                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline,
                              @RequestParam(required = false) MultipartFile image,
-                             @AuthenticationPrincipal User currentUser,
+//                             @AuthenticationPrincipal User currentUser,
                              RedirectAttributes redirectAttributes
     ) throws IOException {
 
@@ -52,8 +53,8 @@ public class TaskController {
             return "redirect:/";
         }
 
-        User assignee = currentUser;
-        if (userId != null) {
+        User assignee = null;
+        if (userId != null && userId!=0) {
             Optional<User> userOpt = userRepository.findById(userId);
             if (userOpt.isPresent()) {
                 assignee = userOpt.get();
@@ -83,13 +84,14 @@ public class TaskController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Integer id, Model model) {
+    public String showEditForm(@PathVariable Integer id, Model model, HttpSession session) {
         Optional<Task> taskOpt = taskRepository.findById(id);
-
+        User currentUser = (User) session.getAttribute("user");
         if (taskOpt.isPresent()) {
             model.addAttribute("task", taskOpt.get());
             model.addAttribute("columns", taskColumnRepository.findAll());
             model.addAttribute("users", userRepository.findAll());
+            model.addAttribute("currentUser", currentUser);
             return "task/edit-task";
         } else {
             return "redirect:/";
@@ -119,9 +121,11 @@ public class TaskController {
         Optional<TaskColumn> columnOpt = taskColumnRepository.findById(columnId);
         columnOpt.ifPresent(task::setColumn);
 
-        if (userId != null) {
+        if (userId != null && userId!=0) {
             Optional<User> userOpt = userRepository.findById(userId);
             userOpt.ifPresent(task::setUser);
+        }else{
+            task.setUser(null);
         }
 
         if (deadline != null) {
@@ -160,7 +164,7 @@ public class TaskController {
         System.out.println("id = " + id);
         Optional<Task> optionalTask = taskRepository.findByIdWithComments(id);
 
-        if (optionalTask.isEmpty()){
+        if (optionalTask.isEmpty()) {
             return "index";
         }
 

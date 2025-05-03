@@ -49,7 +49,7 @@
                              alt="User" class="user-avatar">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" th:href="@{/profile}">
+                        <li><a class="dropdown-item" th:href="@{'/profile/'+${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
                         </a></li>
                         <li><a class="dropdown-item" th:href="@{/settings}">
@@ -207,7 +207,7 @@
                                             <i class="fas fa-user"></i>
                                         </span>
                                         <select class="form-select" name="userId">
-                                            <option value="">Unassigned</option>
+                                            <option th:value="${0}">Unassigned</option>
                                             <option th:each="user : ${users}"
                                                     th:value="${user.id}"
                                                     th:text="${user.username}"

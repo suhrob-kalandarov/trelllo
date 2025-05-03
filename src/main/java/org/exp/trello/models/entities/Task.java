@@ -34,7 +34,7 @@ public class Task extends BaseEntity {
     private TaskColumn column;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany
