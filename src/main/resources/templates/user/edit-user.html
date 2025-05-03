@@ -52,13 +52,11 @@
                         <img th:unless="${currentUser?.attachment != null}"
                              src="/images/default-avatar.png"
                              alt="User" class="user-avatar">
+                        <span th:text="${currentUser?.getName()}">username</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" th:href="@{/profile}">
+                        <li><a class="dropdown-item" th:href="@{'/profile/' + ${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
-                        </a></li>
-                        <li><a class="dropdown-item" th:href="@{/settings}">
-                            <i class="fas fa-cog me-2"></i> Settings
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
@@ -80,32 +78,37 @@
     <div class="container">
         <div class="page-header">
             <div class="d-flex align-items-center">
-                <a href="/team" class="btn btn-outline-primary me-3">
-                    <i class="fas fa-arrow-left"></i>
-                </a>
                 <div>
                     <h1 class="page-title">
-                        <i class="fas fa-user-edit me-2 text-primary"></i>
                         Edit User
                     </h1>
+                    <div class="position-absolute top-5 translate-middle-y" style="right: 200px; z-index: 1055;">
+                        <a th:href="@{/}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Board
+                        </a>
+                    </div>
                     <p class="page-subtitle">Update user information and roles</p>
                 </div>
+
+                <div class="position-absolute top-10 end-0 p-3" style="z-index: 1055;">
+                    <!-- Success Message -->
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${successMessage}">Success message</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span th:text="${errorMessage}">Error message</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- Success Message -->
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${successMessage}">Success message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-
-        <!-- Error Message -->
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${errorMessage}">Error message</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
 
         <div class="row">
             <!-- User Info Card -->
@@ -150,18 +153,12 @@
                             <div class="detail-item">
                                 <div class="detail-label">Status</div>
                                 <div class="detail-value">
+                                    <span th:if="${user.active}" class="badge bg-success">Active</span>
+                                    <span th:unless="${user.active}" class="badge bg-secondary">Inactive</span>
                                     <span th:if="${user.verified}" class="badge bg-success">
-                                        <i class="fas fa-check-circle me-1"></i> Verified
-                                    </span>
+                                    <i class="fas fa-check-circle me-1"></i> Verified</span>
                                     <span th:unless="${user.verified}" class="badge bg-warning">
-                                        <i class="fas fa-exclamation-circle me-1"></i> Not Verified
-                                    </span>
-                                    <span th:if="${user.active}" class="badge bg-success">
-                                        <i class="fas fa-check-circle me-1"></i> Active
-                                    </span>
-                                    <span th:unless="${user.active}" class="badge bg-warning">
-                                        <i class="fas fa-exclamation-circle me-1"></i> Not Active
-                                    </span>
+                                    <i class="fas fa-exclamation-circle me-1"></i> Not Verified</span>
                                 </div>
                             </div>
                             <div class="detail-item">
