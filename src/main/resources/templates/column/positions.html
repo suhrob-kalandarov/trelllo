@@ -204,7 +204,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">
+        <a class="navbar-brand" href="/">
             <i class="fas fa-tasks"></i>
             <span>TaskFlow</span>
         </a>
@@ -216,12 +216,41 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">
+                    <a class="nav-link" href="/">
                         <i class="fas fa-columns"></i>
-                        Board
+                        Home
                     </a>
                 </li>
             </ul>
+<!--
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <img th:if="${currentUser?.attachment != null}"
+                             th:src="@{'/attachment/get/' + ${currentUser.attachment.id}}"
+                             alt="User" class="user-avatar"
+                             onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+
+                        <img th:unless="${currentUser?.attachment != null}"
+                             src="/images/default-avatar.png"
+                             alt="User" class="user-avatar">
+                        <span th:text="${currentUser?.getName()}">username</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{'/profile/' + ${currentUser.id}}">
+                            <i class="fas fa-user me-2"></i> Profile
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button class="dropdown-item" type="submit">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>-->
         </div>
     </div>
 </nav>
@@ -231,8 +260,8 @@
     <div class="page-header">
         <h1 class="page-title">Manage Column Positions</h1>
         <div>
-            <a th:href="@{/}" class="btn btn-outline-secondary me-2">
-                <i class="fas fa-arrow-left"></i> Back to Board
+            <a href="/" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Back to Home
             </a>
         </div>
     </div>
@@ -255,8 +284,10 @@
             <div class="position-name" th:text="${column.name}">Column Name</div>
             <div class="position-status">
                 <span class="badge rounded-pill"
-                      th:classappend="${!column.active} ? 'bg-success' : 'bg-secondary'"
-                      th:text="${!column.active} ? 'Active' : 'Inactive'"></span>
+                      th:classappend="${column.active} ? 'bg-success' : 'bg-secondary'"
+                      th:text="${column.active} ? 'Active' : 'Inactive'">
+                </span>
+
             </div>
         </div>
     </div>
