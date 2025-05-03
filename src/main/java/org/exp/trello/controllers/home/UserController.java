@@ -53,11 +53,18 @@ public class UserController {
             @RequestParam(value = "roles", required = false) List<UserRole> roles,
             RedirectAttributes redirectAttributes) {
 
+
+        if (userRepository.existsByEmail(email)){
+            redirectAttributes.addFlashAttribute("errorMessage", "This email already exist!");
+            return "redirect:/team";
+        }
+
         User user = new User();
 
         // set basic info
         user.setUsername(username);
         user.setEmail(email);
+        user.setActive(true);
 
         // set verification status
         //user.setVerified(verified != null && verified);
@@ -85,10 +92,11 @@ public class UserController {
             }
         }
 
-        if (!roles.isEmpty()) {
+        if (roles.isEmpty()) {
+            user.setRoles(Collections.singletonList(UserRole.USER));
+        } else {
             user.setRoles(roles);
         }
-        user.setRoles(Collections.singletonList(UserRole.USER));
 
         // Save user
         userRepository.save(user);

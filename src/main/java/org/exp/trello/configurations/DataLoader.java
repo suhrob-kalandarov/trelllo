@@ -28,6 +28,7 @@ public class DataLoader implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode("root123"));
             user.setRoles(Collections.singletonList(UserRole.USER));
             user.setVerified(true);
+            user.setActive(true);
 
             User manager = new User();
             manager.setUsername("Manager One");
@@ -35,6 +36,7 @@ public class DataLoader implements CommandLineRunner {
             manager.setPassword(passwordEncoder.encode("root123"));
             manager.setRoles(Collections.singletonList(UserRole.MANAGER));
             manager.setVerified(true);
+            user.setActive(true);
 
             User admin = new User();
             admin.setUsername("Admin One");
@@ -42,6 +44,7 @@ public class DataLoader implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("root123"));
             admin.setRoles(Collections.singletonList(UserRole.ADMIN));
             admin.setVerified(true);
+            user.setActive(true);
 
             userRepository.saveAll(List.of(user, manager, admin));
 
