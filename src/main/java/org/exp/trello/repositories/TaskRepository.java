@@ -31,4 +31,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     List<Task> streamTasksByUser(User user);
 
     List<Task> findAllByUser(User user);
+
+    List<Task> findAllByActiveFalse();
 }

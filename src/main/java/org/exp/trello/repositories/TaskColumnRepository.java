@@ -14,4 +14,6 @@ public interface TaskColumnRepository extends JpaRepository<TaskColumn, Integer>
     List<TaskColumn> findAllByActiveTrueOrderByPositionAsc();
 
     List<TaskColumn> findAllByActiveFalseOrderByPositionAsc();
+
+    List<TaskColumn> findAllByActiveFalse();
 }
