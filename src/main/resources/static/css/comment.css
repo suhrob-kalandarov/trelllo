@@ -247,7 +247,7 @@ body {
     flex-grow: 1;
     overflow-y: auto; /* Only comments list is scrollable */
     padding-right: 0.5rem;
-    max-height: 400px;
+    max-height: 300px;
 }
 
 .comment {
