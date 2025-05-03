@@ -28,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">
+                    <a class="nav-link active" href="/">
                         <i class="fas fa-columns"></i>
                         Board
                     </a>
@@ -36,12 +36,6 @@
             </ul>
 
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/team">
-                        <i class="fas fa-users"></i>
-                        Team
-                    </a>
-                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                         <img th:if="${currentUser?.attachment != null}"
@@ -52,13 +46,11 @@
                         <img th:unless="${currentUser?.attachment != null}"
                              src="/images/default-avatar.png"
                              alt="User" class="user-avatar">
+                        <span th:text="${currentUser?.getName()}">username</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" th:href="@{/profile}">
+                        <li><a class="dropdown-item" th:href="@{'/profile/' + ${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
-                        </a></li>
-                        <li><a class="dropdown-item" th:href="@{/settings}">
-                            <i class="fas fa-cog me-2"></i> Settings
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
@@ -127,12 +119,11 @@
                     <table class="table table-hover team-table">
                         <thead>
                         <tr>
-                            <th>User</th>
+                            <th>IMG</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Status</th>
                             <th>Roles</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -157,6 +148,10 @@
                             <td>
                                 <span th:if="${user.active}" class="badge bg-success">Active</span>
                                 <span th:unless="${user.active}" class="badge bg-secondary">Inactive</span>
+                                <span th:if="${user.verified}" class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i> Verified</span>
+                                <span th:unless="${user.verified}" class="badge bg-warning">
+                                    <i class="fas fa-exclamation-circle me-1"></i> Not Verified</span>
                             </td>
                             <td>
                                 <div class="role-badges">
@@ -164,12 +159,6 @@
                                           th:text="${role}"
                                           class="badge bg-primary me-1">ROLE</span>
                                 </div>
-                            </td>
-                            <td>
-                                <span th:if="${user.verified}" class="badge bg-success">
-                                    <i class="fas fa-check-circle me-1"></i> Verified</span>
-                                <span th:unless="${user.verified}" class="badge bg-warning">
-                                    <i class="fas fa-exclamation-circle me-1"></i> Not Verified</span>
                             </td>
                             <td>
                                 <div class="action-buttons">
