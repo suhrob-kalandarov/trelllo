@@ -6,6 +6,7 @@ import org.exp.trello.repositories.*;
 import org.exp.trello.services.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -182,5 +186,42 @@ public class TaskController {
         redirectAttributes.addFlashAttribute("successMessage", "Column deleted successfully");
 
         return "redirect:/";
+    }
+
+    @PostMapping("/extend-deadline")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> extendDeadline(
+            @RequestParam("id") Integer id,
+            @RequestParam("newDeadline") String newDeadlineStr,
+            @RequestParam(value = "reason", required = false) String reason) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Optional<Task> taskOptional = taskRepository.findById(id);
+
+            if (taskOptional.isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Task not found");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            Task task = taskOptional.get();
+
+            // Parse the new deadline
+            LocalDateTime newDeadline = LocalDateTime.parse(newDeadlineStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+            // Update the task deadline
+            task.setDeadline(newDeadline);
+            taskRepository.save(task);
+
+            response.put("success", true);
+            response.put("message", "Deadline extended successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }
