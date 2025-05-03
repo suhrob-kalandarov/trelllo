@@ -22,21 +22,21 @@ public class DataRunner implements CommandLineRunner {
     public void run(String... args) {
         if (userRepository.count() == 0) {
             User user1 = User.builder()
-                    .fullName("User One")
+                    .username("User One")
                     .email("user@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.USER))
                     .build();
 
             User manager = User.builder()
-                    .fullName("Manager One")
+                    .username("Manager One")
                     .email("manager@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.MANAGER))
                     .build();
 
             User admin = User.builder()
-                    .fullName("Admin One")
+                    .username("Admin One")
                     .email("admin@gmail.com")
                     .password(passwordEncoder.encode("root123"))
                     .roles(Collections.singletonList(UserRole.ADMIN))
