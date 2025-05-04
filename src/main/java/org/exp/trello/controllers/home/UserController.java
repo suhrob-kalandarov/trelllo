@@ -9,6 +9,7 @@ import org.exp.trello.models.enums.UserRole;
 import org.exp.trello.repositories.TaskRepository;
 import org.exp.trello.repositories.UserRepository;
 import org.exp.trello.services.AttachmentService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -210,7 +211,9 @@ public class UserController {
     @PostMapping("/delete")
     public String deleteUser(
             @RequestParam("userId") Integer userId,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            HttpSession httpSession
+    ) {
 
         try {
             Optional<User> userOptional = userRepository.findById(userId);
@@ -232,6 +235,13 @@ public class UserController {
 
             taskRepository.saveAll(userTasks);
             userRepository.save(user);
+
+            UserDetails currentUser = (UserDetails) httpSession.getAttribute("user");
+
+            if (currentUser != null && currentUser.getUsername().equals(user.getUsername())){
+                httpSession.invalidate();
+                return "/auth/login";
+            }
 
             redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully");
             return "redirect:/team";
