@@ -36,26 +36,26 @@
 
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
-                       data-bs-toggle="dropdown">
-                        <img th:if="${currentUser?.attachment != null}"
-                             th:src="@{'/attachment/get/' + ${currentUser.attachment.id}}"
-                             alt="User" class="user-avatar"
-                             onerror="this.onerror=null;this.src='/images/default-avatar.png';">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="user-info">
+                            <img th:if="${currentUser?.attachment != null}"
+                                 th:src="@{'/attachment/get/' + ${currentUser.attachment.id}}"
+                                 alt="User" class="user-avatar"
+                                 onerror="this.onerror=null;this.src='/images/default-avatar.png';">
 
-                        <img th:unless="${currentUser?.attachment != null}"
-                             src="/images/default-avatar.png"
-                             alt="User" class="user-avatar">
-                        <span th:text="${currentUser?.getName()}">username</span>
+                            <img th:unless="${currentUser?.attachment != null}"
+                                 src="/images/default-avatar.png"
+                                 alt="User" class="user-avatar">
+
+                            <span class="user-name" th:text="${currentUser?.getName()}">username</span>
+                        </div>
                     </a>
+
 
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{'/profile/'+${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
                         </a></li>
-<!--                        <li><inactive class="dropdown-item" th:href="@{/settings}">-->
-<!--                            <i class="fas fa-cog me-2"></i> Settings-->
-<!--                        </inactive></li>-->
                         <li>
                             <hr class="dropdown-divider">
                         </li>
