@@ -14,27 +14,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/inactive")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class InactiveController {
 
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final TaskColumnRepository taskColumnRepository;
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/columns")
     public String columnsPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("inactiveUsers", taskColumnRepository.findAllByActiveFalse());
         return "inactive/inactive-columns-page";
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/tasks")
     public String tasksPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("inactiveUsers", taskRepository.findAllByActiveFalse());
         return "inactive/inactive-tasks-page";
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/members")
     public String membersPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));

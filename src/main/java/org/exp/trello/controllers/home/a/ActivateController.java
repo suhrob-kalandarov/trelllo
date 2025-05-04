@@ -22,7 +22,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/activate")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class ActivateController {
 
     private final UserRepository userRepository;
@@ -31,6 +30,7 @@ public class ActivateController {
 
     @PostMapping("/member")
     @ResponseBody
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<Map<String, Object>> activateMember(@RequestParam("id") Integer id) {
         Map<String, Object> response = new HashMap<>();
 
@@ -59,6 +59,7 @@ public class ActivateController {
 
     @PostMapping("/task")
     @ResponseBody
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<Map<String, Object>> activateTask(@RequestParam("id") Integer id) {
         Map<String, Object> response = new HashMap<>();
 
@@ -87,6 +88,7 @@ public class ActivateController {
 
     @PostMapping("/column")
     @ResponseBody
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<Map<String, Object>> activateColumn(@RequestParam("id") Integer id) {
         Map<String, Object> response = new HashMap<>();
 

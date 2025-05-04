@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/column")
-@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class TaskColumnController {
 
     @Autowired
@@ -24,7 +23,7 @@ public class TaskColumnController {
 
     @Autowired
     private TaskRepository taskRepository;
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/create")
     public String createColumn(@RequestParam String name, RedirectAttributes redirectAttributes) {
 
@@ -43,7 +42,7 @@ public class TaskColumnController {
         redirectAttributes.addFlashAttribute("successMessage", "Column created successfully");
         return "redirect:/";
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/delete/{id}")
     public String deleteColumn(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         Optional<TaskColumn> optionalColumn = taskColumnRepository.findById(id);
@@ -68,7 +67,7 @@ public class TaskColumnController {
 
         return "redirect:/";
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Optional<TaskColumn> optionalColumn = taskColumnRepository.findById(id);
@@ -83,7 +82,7 @@ public class TaskColumnController {
             return "redirect:/";
         }
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/update/{id}")
     public String updateColumn(@PathVariable Integer id,
                                @RequestParam String name,

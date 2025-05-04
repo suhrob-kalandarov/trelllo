@@ -18,12 +18,11 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/positions")
-@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class PositionController {
 
     @Autowired
     private TaskColumnRepository taskColumnRepository;
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping
     public String showPositionsPage(Model model, HttpSession session) {
         List<TaskColumn> columns = taskColumnRepository.findAllByActiveTrueOrderByPositionAsc();
@@ -31,7 +30,7 @@ public class PositionController {
         model.addAttribute("columns", columns);
         return "column/positions";
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/update")
     public String updatePositions(@RequestParam("columnIds[]") List<Integer> columnIds,
                                   RedirectAttributes redirectAttributes

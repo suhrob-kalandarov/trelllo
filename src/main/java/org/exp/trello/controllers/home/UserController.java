@@ -27,7 +27,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -38,13 +37,14 @@ public class UserController {
     /**
      * Display the adding user page
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add-page")
     public String addUserPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("allRoles", Arrays.asList(UserRole.values()));
         return "user/add-user";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public String addUser(
             @RequestParam("username") String username,
@@ -111,6 +111,7 @@ public class UserController {
     /**
      * Display the edit user page
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/edit/{id}")
     public String editUserPage(
             @PathVariable Integer id,
@@ -135,6 +136,7 @@ public class UserController {
     /**
      * Update user information
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/update")
     public String updateUser(
             @RequestParam("userId") Integer userId,
@@ -218,6 +220,7 @@ public class UserController {
     /**
      * Delete (deactivate) user
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete")
     public String deleteUser(
             @RequestParam("userId") Integer userId,

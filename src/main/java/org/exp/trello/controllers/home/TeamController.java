@@ -14,7 +14,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/team")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class TeamController {
 
     private final UserRepository userRepository;
@@ -22,6 +21,7 @@ public class TeamController {
     /**
      * Display the team management page with all users
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public String teamPage(Model model, HttpSession httpSession) {
         List<User> users = userRepository.findAllByActiveTrue();
