@@ -142,6 +142,7 @@ public class UserController {
             @RequestParam(value = "verified", required = false) Boolean verified,
             @RequestParam(value = "active", required = false) Boolean active,
             @RequestParam(value = "avatar", required = false) MultipartFile avatarFile,
+            @RequestParam(value = "roles", required = false) List<UserRole> roles,
             RedirectAttributes redirectAttributes) {
 
         try {
@@ -163,6 +164,13 @@ public class UserController {
 
             // Update user active status
             user.setActive(active != null && active);
+
+            if (roles.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "At least 1 role");
+                return "redirect:/user/edit/" + userId;
+            } else {
+                user.setRoles(roles);
+            }
 
             // Update password if provided
             if (password != null && !password.isEmpty()) {
