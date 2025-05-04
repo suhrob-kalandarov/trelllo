@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.exp.trello.repositories.TaskColumnRepository;
 import org.exp.trello.repositories.TaskRepository;
 import org.exp.trello.repositories.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/inactive")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class InactiveController {
 
     private final UserRepository userRepository;

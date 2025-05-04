@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.exp.trello.models.entities.TaskColumn;
 import org.exp.trello.repositories.TaskColumnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/positions")
+@PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
 public class PositionController {
 
     @Autowired

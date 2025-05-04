@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.exp.trello.models.entities.User;
 import org.exp.trello.repositories.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/team")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class TeamController {
 
     private final UserRepository userRepository;
