@@ -23,20 +23,20 @@ public class InactiveController {
     public String columnsPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("inactiveUsers", taskColumnRepository.findAllByActiveFalse());
-        return "a/inactive-columns-page";
+        return "inactive/inactive-columns-page";
     }
 
     @GetMapping("/tasks")
     public String tasksPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("inactiveUsers", taskRepository.findAllByActiveFalse());
-        return "a/inactive-tasks-page";
+        return "inactive/inactive-tasks-page";
     }
 
     @GetMapping("/members")
     public String membersPage(Model model, HttpSession httpSession) {
         model.addAttribute("currentUser", httpSession.getAttribute("user"));
         model.addAttribute("inactiveUsers", userRepository.findAllByActiveFalse());
-        return "a/inactive-members-page";
+        return "inactive/inactive-members-page";
     }
 }

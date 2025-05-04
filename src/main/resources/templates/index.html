@@ -53,9 +53,9 @@
                         <li><a class="dropdown-item" th:href="@{'/profile/'+${currentUser.id}}">
                             <i class="fas fa-user me-2"></i> Profile
                         </a></li>
-<!--                        <li><a class="dropdown-item" th:href="@{/settings}">-->
+<!--                        <li><inactive class="dropdown-item" th:href="@{/settings}">-->
 <!--                            <i class="fas fa-cog me-2"></i> Settings-->
-<!--                        </a></li>-->
+<!--                        </inactive></li>-->
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -99,12 +99,16 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/inactive/columns}">
-                    <i class="fas fa-columns me-1"></i> Inactive Columns <i class="fas fa-ghost me-1"></i>
+                    <i class="fas fa-ghost me-1"></i>
+                     Inactive Columns
+                    <i class="fas fa-columns me-1"></i>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/inactive/tasks}">
-                    <i class="fas fa-tasks me-1"></i> Inactive Tasks <i class="fas fa-ghost me-1"></i>
+                    <i class="fas fa-ghost me-1"></i>
+                     Inactive Tasks
+                    <i class="fas fa-tasks me-1"></i>
                 </a>
             </li>
             <li class="nav-item">
@@ -127,10 +131,7 @@
                 <span th:text="${column.name}">Column Name</span>
             </div>
             <div class="column-actions">
-                <span class="badge rounded-pill"
-                      th:classappend="${column.active} ? 'bg-success' : 'bg-secondary'"
-                      th:text="${column.active} ? 'Active' : 'Inactive'">
-                </span>
+
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-h"></i>
