@@ -165,7 +165,7 @@ public class UserController {
             // Update user active status
             user.setActive(active != null && active);
 
-            if (roles.isEmpty()) {
+            if (roles==null || roles.isEmpty()) {
                 redirectAttributes.addFlashAttribute("errorMessage", "At least 1 role");
                 return "redirect:/user/edit/" + userId;
             } else {
