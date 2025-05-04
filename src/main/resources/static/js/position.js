@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show success message
                 showNotification('Positions saved successfully', 'success');
 
-                // Reload page after a short delay
+                // Reload page after inactive short delay
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
