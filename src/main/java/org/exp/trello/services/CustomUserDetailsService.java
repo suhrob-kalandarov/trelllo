@@ -1,6 +1,8 @@
 package org.exp.trello.services;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
+import org.exp.trello.models.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,22 +10,21 @@ import org.springframework.stereotype.Service;
 import org.exp.trello.repositories.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
+    @Autowired
     private final UserRepository userRepository;
-
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(user -> User.builder()
-                        .username(user.getEmail())
-                        .password(user.getPassword())
-                        .roles(user.getRoles().stream().map(role -> role.name()).toArray(String[]::new))
-                        .build())
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        /*if (!user.isVerified()) {
+            throw new UsernameNotFoundException("Account is not verified");
+        }*/
+
+        return user;
     }
 }
