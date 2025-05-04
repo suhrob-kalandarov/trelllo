@@ -9,6 +9,7 @@ import org.exp.trello.models.enums.UserRole;
 import org.exp.trello.repositories.TaskRepository;
 import org.exp.trello.repositories.UserRepository;
 import org.exp.trello.services.AttachmentService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 
     private final UserRepository userRepository;

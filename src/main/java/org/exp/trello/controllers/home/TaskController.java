@@ -7,6 +7,7 @@ import org.exp.trello.services.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,7 @@ public class TaskController {
     @Autowired
     private CommentRepository commentRepository;
 
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping
     public String createTask(@RequestParam String name,
                              @RequestParam(required = false) String description,
@@ -87,6 +89,7 @@ public class TaskController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model, HttpSession session) {
         Optional<Task> taskOpt = taskRepository.findById(id);
@@ -101,7 +104,7 @@ public class TaskController {
             return "redirect:/";
         }
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/update/{id}")
     public String updateTask(@PathVariable Integer id,
                              @RequestParam String name,
@@ -163,6 +166,7 @@ public class TaskController {
         return "{\"success\": false}";
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/delete/{id}")
     public String deleteColumn(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         System.out.println("id = " + id);
@@ -188,6 +192,7 @@ public class TaskController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/extend-deadline")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> extendDeadline(
