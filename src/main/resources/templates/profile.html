@@ -34,37 +34,6 @@
                     </a>
                 </li>
             </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                        <img th:if="${user?.attachment != null}"
-                             th:src="@{'/attachment/get/' + ${user.attachment.id}}"
-                             alt="User" class="user-avatar"
-                             onerror="this.onerror=null;this.src='/images/default-avatar.png';">
-
-                        <img th:unless="${user?.attachment != null}"
-                             src="/images/default-avatar.png"
-                             alt="User" class="user-avatar">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-<!--                        <li><a class="dropdown-item active" th:href="@{'/profile/'+${user.id}}">-->
-<!--                            <i class="fas fa-user me-2"></i> Profile-->
-<!--                        </a></li>-->
-<!--                        <li><a class="dropdown-item" th:href="@{/settings}">-->
-<!--                            <i class="fas fa-cog me-2"></i> Settings-->
-<!--                        </a></li>-->
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form th:action="@{/logout}" method="post">
-                                <button class="dropdown-item" type="submit">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </div>
     </div>
 </nav>
