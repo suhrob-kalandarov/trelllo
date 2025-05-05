@@ -78,7 +78,7 @@
             transition: var(--transition);
             border: none;
             overflow: hidden;
-            height: 100%;
+            height: 800px;
             display: flex;
             flex-direction: column;
         }
@@ -343,8 +343,7 @@
         .comments-container {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 500px;
+            height: 700px;
         }
 
         .comments-list {
@@ -661,7 +660,6 @@
                 <div class="task-details-card">
                     <div class="task-details-header">
                         <h2 class="task-details-title" th:text="${task.name}">Task Title</h2>
-                        <p class="task-details-subtitle" th:text="${task.column.name}">Column Name</p>
                     </div>
                     <div class="task-details-body">
                         <!-- Task Image (if available) -->
